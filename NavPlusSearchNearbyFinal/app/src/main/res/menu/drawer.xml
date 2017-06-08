@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/home"
+            android:checked="false"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="@string/home_string" />
+
+
+        <item
+            android:id="@+id/Restaurant"
+            android:checked="false"
+            android:icon="@drawable/ic_restaurant_black_24dp"
+            android:title="Restaurant" />
+
+        <item
+            android:id="@+id/Schools"
+            android:checked="false"
+            android:icon="@drawable/ic_school_black_24dp"
+            android:title="Schools" />
+
+        <item
+            android:id="@+id/Hospital"
+            android:checked="false"
+            android:icon="@drawable/ic_local_hospital_black_24dp"
+            android:title="Hospitals" />
+    </group>
+</menu>

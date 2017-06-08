@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SearchNearby</string>
+    <string name="title_activity_maps">GMapDoctor</string>
+    <string name="home_string">Location</string>
+    <string name="restra_string">Restaurant</string>
+    <string name="school_string">Schools</string>
+    <string name="hospital_string">Hospitals</string>\
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
+</resources>
