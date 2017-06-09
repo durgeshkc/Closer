@@ -7,6 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
@@ -19,9 +20,9 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
     //getnearbyplacedata======parsertask
 
-    String googlePlacesData;
-    GoogleMap mMap;
-    String url;
+    private String googlePlacesData;
+    private GoogleMap mMap;
+    private String url;
 
     @Override
     protected String doInBackground(Object... params) {
@@ -41,9 +42,9 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     @Override
     protected void onPostExecute(String result) {
         Log.d("GooglePlacesReadTask", "onPostExecute Entered");
-        List<HashMap<String, String>> nearbyPlacesList = null;
+        List<HashMap<String, String>> nearbyPlacesList;
         DataParser dataParser = new DataParser();
-        nearbyPlacesList =  dataParser.parse(result);
+        nearbyPlacesList = dataParser.parse(result);
         ShowNearbyPlaces(nearbyPlacesList);
         Log.d("GooglePlacesReadTask", "onPostExecute Exit");
     }
@@ -51,7 +52,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     private void ShowNearbyPlaces(List<HashMap<String, String>> nearbyPlacesList) {
         for (int i = 0; i < nearbyPlacesList.size(); i++) {
 
-            Log.d("onPostExecute","Entered into showing locations");
+            Log.d("onPostExecute", "Entered into showing locations");
             MarkerOptions markerOptions = new MarkerOptions();
             HashMap<String, String> googlePlace = nearbyPlacesList.get(i);
             double lat = Double.parseDouble(googlePlace.get("lat"));
@@ -61,7 +62,8 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName + " : " + vicinity);
-            mMap.addMarker(markerOptions);
+            Marker m = mMap.addMarker(markerOptions);
+            Parent.mMarkerPlaceLink.put(m.getId(), googlePlace.get("reference"));
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             //move map camera
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
