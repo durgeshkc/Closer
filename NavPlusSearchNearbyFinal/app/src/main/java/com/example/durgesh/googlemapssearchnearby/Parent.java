@@ -40,25 +40,23 @@ import java.util.HashMap;
  * Created by durgesh on 5/23/2017.
  */
 
-public class Parent extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,LocationListener {
+public class Parent extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
-    private String mActivityTitle;
-
-
-    private GoogleMap mMap;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    public static HashMap<String, String> mMarkerPlaceLink = new HashMap<String, String>();
     double latitude;
     double longitude;
-    private int PROXIMITY_RADIUS = 10000;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
-
-    HashMap<String, String> mMarkerPlaceLink = new HashMap<String, String>();
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private String mActivityTitle;
+    private GoogleMap mMap;
+    private int PROXIMITY_RADIUS = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +90,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {   //item.....previous
                 //Checking if the item is in checked state or not, if not make it in checked state
-                if(menuItem.isChecked()) menuItem.setChecked(false);
+                if (menuItem.isChecked()) menuItem.setChecked(false);
                 else menuItem.setChecked(true);
 
                 //Closing drawer on item click
@@ -100,11 +98,11 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
 
 
                 //Check to see which item was being clicked and perform appropriate action
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
 
                     case R.id.home:
-                        Toast.makeText(getApplicationContext(),"Showing Current Location",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Showing Current Location", Toast.LENGTH_SHORT).show();
                         //Intent intent = new Intent(Parent.this, MapsActivity.class);
                         //startActivity(intent);
                         return true;
@@ -115,7 +113,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
 
                         android.support.v4.app.FragmentTransaction fragmentTransaction;
 
-                        Toast.makeText(getApplicationContext(),"Showing Restaurants",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Showing Restaurants", Toast.LENGTH_SHORT).show();
 
                         String Restaurant = "restaurant";
                         Log.d("onClick", "Button is Clicked");
@@ -125,14 +123,14 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
                         DataTransfer[0] = mMap;
                         DataTransfer[1] = url;
                         Log.d("onClick", url);
-                        GetNearbyPlacesData getNearbyPlacesData= new GetNearbyPlacesData();
+                        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
                         getNearbyPlacesData.execute(DataTransfer);
                         Toast.makeText(Parent.this, "Nearby Restaurants", Toast.LENGTH_LONG).show();
 
                         return true;
 
                     case R.id.Schools:
-                        Toast.makeText(getApplicationContext(),"Showing Schools",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Showing Schools", Toast.LENGTH_SHORT).show();
                         //String School = "school";
                         String Doctor = "doctor";
                         Log.d("onClick", "Button is Clicked");
@@ -147,7 +145,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
                         Log.d("onClick", url2);
                         GetNearbyPlacesData getNearbyPlacesData2 = new GetNearbyPlacesData();
                         getNearbyPlacesData2.execute(DataTransfer2);
-                        Toast.makeText(Parent.this,"Nearby Schools", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Parent.this, "Nearby Schools", Toast.LENGTH_LONG).show();
 
                         /* fragment = new MapsActivity();
                          fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -158,7 +156,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
 
                     case R.id.Hospital:
 
-                        Toast.makeText(getApplicationContext(),"Showing Hospitals ",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Showing Hospitals ", Toast.LENGTH_SHORT).show();
 
                         String Hospital = "hospital";
                         Log.d("onClick", "Button is Clicked");
@@ -177,7 +175,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
                         return true;
 
                     default:
-                        Toast.makeText(getApplicationContext(),"Somethings Wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;
 
                 }
@@ -185,7 +183,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
         });
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.openDrawer, R.string.closeDrawer){
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.openDrawer, R.string.closeDrawer) {
             //toolbar eliminated from above method.....
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -221,6 +219,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
         actionBarDrawerToggle.syncState();
 
     }
+
     /* @Override
      protected void onPostCreate(Bundle savedInstanceState) {
          super.onPostCreate(savedInstanceState);
@@ -245,7 +244,6 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
 
         return super.onOptionsItemSelected(item);
     }
-
 
     private boolean CheckGooglePlayServices() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
@@ -283,8 +281,11 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
 
             @Override
             public void onInfoWindowClick(Marker arg0) {
-                Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
                 String reference = mMarkerPlaceLink.get(arg0.getId());
+//                TODO: Initialize mMarkerPLaceLink(currently empty) which is the reason of the null value error. Check in the link sent in whatsapp
+                Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
+                //String reference = arg0.getId();
+                Log.d("Risk,Parent", "onInfoWindowClick: " + reference);
                 intent.putExtra("reference", reference);
 
                 // Starting the Place Details Activity
@@ -301,6 +302,7 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
                 .build();
         mGoogleApiClient.connect();
     }
+
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
@@ -313,6 +315,12 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
@@ -326,14 +334,10 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     @Override
     public void onLocationChanged(Location location) {
         Log.d("onLocationChanged", "entered");
@@ -369,7 +373,6 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
 
 
     }
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -435,7 +438,6 @@ public class Parent extends AppCompatActivity implements OnMapReadyCallback,Goog
             // You can add here other case statements according to your requirement.
         }
     }
-
 
 
 }
